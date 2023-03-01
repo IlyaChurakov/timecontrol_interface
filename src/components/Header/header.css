@@ -1,0 +1,32 @@
+.header {
+	width: 98%;
+	height: 70px;
+	margin-top: 17px;
+	position: fixed;
+	top: 0;
+	left: 50%;
+	border-radius: 40px;
+	transform: translateX(-50%);
+	background-color: #161b22;
+	display: flex;
+	justify-content: flex-start;
+	font-size: 24px;
+	align-items: center;
+}
+
+.header .button {
+	cursor: pointer;
+	transition: 0.3s all;
+	font-size: 20px;
+	margin: 0px 20px;
+	color: #f0f6fc;
+	text-decoration: none;
+}
+
+.header .button:first-child {
+	margin-left: 40px;
+}
+
+.header .button:hover {
+	color: #babbbd;
+}

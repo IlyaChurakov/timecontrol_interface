@@ -1,0 +1,59 @@
+.cameraTitle {
+	margin-top: 20px;
+}
+.btnWrapper {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+}
+.btnWrapper button {
+	width: 200px;
+	height: 25px;
+	font-size: 16px;
+	margin: 5px 0;
+	border: none;
+	color: #ddefe0;
+	border-radius: 15px;
+	background-color: #2ea043;
+	transition: 0.1s all;
+}
+.btnWrapper button:hover {
+	background-color: #34b64c;
+	cursor: pointer;
+}
+.btnWrapper button:active {
+	scale: 0.95;
+}
+.cameraDataField {
+	background: #0d1117;
+	border: 1px solid #8f959d;
+	color: #8f959d;
+	border-radius: 6px;
+	padding: 20px;
+	width: 1030px;
+	height: 615px;
+	box-sizing: border-box;
+	overflow-y: scroll;
+	margin-top: 20px;
+	position: relative;
+}
+
+.cameraDataField_item {
+	width: 100%;
+}
+
+.cameraDataField::-webkit-scrollbar {
+	width: 7px; /* ширина scrollbar */
+}
+.cameraDataField::-webkit-scrollbar-track {
+	background: transparent; /* цвет дорожки */
+}
+.cameraDataField::-webkit-scrollbar-thumb {
+	background-color: rgb(175, 175, 175); /* цвет плашки */
+	border-radius: 20px; /* закругления плашки */
+	border: none; /* padding вокруг плашки */
+}
+
+.dataViewer {
+	display: flex;
+}
