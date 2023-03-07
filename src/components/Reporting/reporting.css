@@ -3,6 +3,9 @@
 	max-height: 650px;
 	margin-top: 20px;
 }
+.firstColumn h2 {
+	text-align: center;
+}
 
 table tbody {
 	overflow-y: scroll;
@@ -102,15 +105,15 @@ table tr {
 	width: 15px;
 }
 
-.report {
+.reportRep {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
 	align-items: center;
-	height: 100px;
+	height: 65px;
 }
 
-.report input {
+.reportRep input {
 	margin: 0px 0;
 	height: 20px;
 	width: 150px;
@@ -130,7 +133,7 @@ table tr {
 	text-align: center;
 }
 
-.report button {
+.reportRep button {
 	width: 155px;
 	height: 25px;
 	font-size: 16px;
@@ -144,10 +147,10 @@ table tr {
 	align-items: center;
 	justify-content: center;
 }
-.report button:hover {
+.reportRep button:hover {
 	background-color: #34b64c;
 	cursor: pointer;
 }
-.report button:active {
+.reportRep button:active {
 	scale: 0.95;
 }

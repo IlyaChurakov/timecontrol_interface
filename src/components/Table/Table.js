@@ -194,12 +194,14 @@ const Table = () => {
 
 			filtered.forEach((event, num) => {
 				if (
-					filtered[num].eventType == "Вход" ||
-					filtered[num].eventType == "Вход по лицу"
+					filtered[num].eventType &&
+					(filtered[num].eventType == "Вход" ||
+						filtered[num].eventType == "Вход по лицу")
 				) {
 					if (
-						(filtered[num + 1] && filtered[num + 1].eventType == "Выход") ||
-						filtered[num + 1].eventType == "Выход по лицу"
+						filtered[num + 1] &&
+						(filtered[num + 1].eventType == "Выход" ||
+							filtered[num + 1].eventType == "Выход по лицу")
 					) {
 						timeObj.worktime =
 							timeObj.worktime + transformDateToWorkTime(filtered, num, num + 1)
@@ -308,7 +310,7 @@ const Table = () => {
 		<div className='table_wrapper'>
 			<div className='firstColumn'>
 				<h2>Данные из СКУД</h2>
-				<form className='report'>
+				<form className='reportSKUD'>
 					<input ref={reportFIO} type='search' placeholder='ФИО' />
 					<input ref={reportDate} type='date' />
 					<button onClick={e => makeReport(e)}>Составить отчет</button>

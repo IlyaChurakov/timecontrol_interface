@@ -254,8 +254,8 @@ const Reporting = () => {
 	return (
 		<div className='table_wrapper'>
 			<div className='firstColumn'>
-				<h2>Данные из СКУД</h2>
-				<form className='report'>
+				<h2>Отчетность по СКУД</h2>
+				<form className='reportRep'>
 					<input type='date' ref={reportDate} />
 					<button onClick={e => everyEmployee(e)}>Составить отчет</button>
 				</form>
@@ -294,16 +294,22 @@ const Reporting = () => {
 														  } ч. ${Math.floor(
 																(item.latetime / (1000 * 60)) % 60
 														  )} мин.`
-														: ` ${
+														: null
+													: null}
+											</td>
+											<td>
+												{item !== undefined
+													? item.latetime < 0
+														? ` ${
 																((item.latetime * -1) / (1000 * 60) -
 																	(((item.latetime * -1) / (1000 * 60)) % 60)) /
 																60
 														  } ч. ${Math.floor(
 																((item.latetime * -1) / (1000 * 60)) % 60
 														  )} мин.`
-													: "пусто"}
+														: null
+													: null}
 											</td>
-											<td>...</td>
 											<td>
 												{item !== undefined
 													? ` ${
@@ -313,9 +319,17 @@ const Reporting = () => {
 													  } ч. ${Math.floor(
 															(item.worktime / (1000 * 60)) % 60
 													  )} мин.`
-													: "пусто"}
+													: null}
 											</td>
-											<td>...</td>
+											<td>
+												{item !== undefined
+													? ` ${Math.floor(
+															(item.commonworktime * 1000 * 60 -
+																item.worktime) /
+																(1000 * 60)
+													  )} мин`
+													: null}
+											</td>
 											<td>
 												{item !== undefined
 													? ` ${
@@ -323,7 +337,7 @@ const Reporting = () => {
 																(item.commonworktime % 60)) /
 															60
 													  } ч. ${Math.floor(item.commonworktime % 60)} мин.`
-													: "пусто"}
+													: null}
 											</td>
 										</tr>
 									)

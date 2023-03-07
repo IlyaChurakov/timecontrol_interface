@@ -254,6 +254,16 @@ const Cameras = () => {
 		}
 	}
 
+	// useEffect(() => {
+	// 	const res = data.reduce((o, i) => {
+	// 		if (!o.find(v => v.fio == i.fio && v.id_camera == i.id_camera)) {
+	// 			o.push(i)
+	// 		}
+	// 		return o
+	// 	}, [])
+	// 	console.log(res, "gfgfgfg")
+	// }, [data])
+
 	useEffect(() => {
 		getZones()
 		getData()
@@ -339,9 +349,12 @@ const Cameras = () => {
 											<td>{item !== undefined ? item.id_camera : null}</td>
 											<td>
 												{item !== undefined
-													? item.date.split("T")[1].split(".0")[0]
+													? String(new Date(item.date))
+															.split(/\s\d\d\d\d\s/)[1]
+															.split("GMT")[0]
 													: null}
 											</td>
+											{console.log(data)}
 											<td>
 												{item !== undefined ? item.date.split("T")[0] : null}
 											</td>
