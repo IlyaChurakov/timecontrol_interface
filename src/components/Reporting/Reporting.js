@@ -1,23 +1,14 @@
-import { React, useState, useRef, useEffect } from "react"
-import "./reporting.css"
-import { URL } from "../../variables"
+import { React, useRef, useState } from 'react'
+import './reporting.css'
 
 const Reporting = () => {
-	const [data, setData] = useState(null)
-	const [startData, setStartData] = useState(null)
 	const [reportData, setReportData] = useState([])
-	const [commonWorkTime, setCommonWorkTime] = useState(0) // было null
-	const [workTime, setWorkTime] = useState(0)
-	const [lateTime, setLateTime] = useState(0)
 
 	const reportDate = useRef()
 
-	// const eventsOfAllEmp = []
-	// const watchListOfEmployees = []
-
-	useEffect(() => {
-		console.log(reportData)
-	}, [reportData])
+	// useEffect(() => {
+	// 	console.log(reportData)
+	// }, [reportData])
 
 	const filterReportData = arr => {
 		const time = {
@@ -27,8 +18,6 @@ const Reporting = () => {
 			commonworktime: null,
 		}
 
-		// let eventsOfAllEmp = []
-
 		if (arr.length) {
 			console.log(arr[0].name)
 			const byField = field => {
@@ -36,16 +25,16 @@ const Reporting = () => {
 			}
 
 			let filtered = [...arr]
-			filtered.sort(byField("date"))
+			filtered.sort(byField('date'))
 
 			const transformDateToWorkTime = (arr, start, finish) => {
 				let startWork = arr[start].date
 				let finishWork = arr[finish].date
 
-				let startYMD = startWork.split("T")[0].replace(/\-/g, ".")
-				let startHMS = startWork.split("T")[1].split(".0")[0]
-				let finishYMD = finishWork.split("T")[0].replace(/\-/g, ".")
-				let finishHMS = finishWork.split("T")[1].split(".0")[0]
+				let startYMD = startWork.split('T')[0].replace(/\-/g, '.')
+				let startHMS = startWork.split('T')[1].split('.0')[0]
+				let finishYMD = finishWork.split('T')[0].replace(/\-/g, '.')
+				let finishHMS = finishWork.split('T')[1].split('.0')[0]
 
 				let startTime = new Date(`${startYMD} ${startHMS}`)
 				let finishTime = new Date(`${finishYMD} ${finishHMS}`)
@@ -55,11 +44,11 @@ const Reporting = () => {
 			}
 
 			const transformDateToHMS = start => {
-				let startYMD = filtered[start].date.split("T")[0].replace(/\-/g, ".")
-				let startHMS = filtered[start].date.split("T")[1].split(".0")[0]
-				let hours = startHMS.split(":")[0]
-				let minutes = startHMS.split(":")[1].split(":")[0]
-				let seconds = startHMS.split(":")[1]
+				let startYMD = filtered[start].date.split('T')[0].replace(/\-/g, '.')
+				let startHMS = filtered[start].date.split('T')[1].split('.0')[0]
+				let hours = startHMS.split(':')[0]
+				let minutes = startHMS.split(':')[1].split(':')[0]
+				let seconds = startHMS.split(':')[1]
 				return {
 					startYMD,
 					startHMS,
@@ -77,10 +66,10 @@ const Reporting = () => {
 			const findIn = () => {
 				for (let i = 0; i < filtered.length - 1; i++) {
 					if (
-						(filtered[i].eventType == "Вход" ||
-							filtered[i].eventType == "Вход по лицу") &&
-						(filtered[i + 1].eventType == "Выход" ||
-							filtered[i + 1].eventType == "Выход по лицу")
+						(filtered[i].eventType == 'Вход' ||
+							filtered[i].eventType == 'Вход по лицу') &&
+						(filtered[i + 1].eventType == 'Выход' ||
+							filtered[i + 1].eventType == 'Выход по лицу')
 					) {
 						firstAndLastEventsInOut.inTime = i
 						time.latetime =
@@ -107,8 +96,8 @@ const Reporting = () => {
 
 				for (let i = 0; i < reverseFiltered.length - 1; i++) {
 					if (
-						reverseFiltered[i].eventType == "Выход" ||
-						reverseFiltered[i].eventType == "Выход по лицу"
+						reverseFiltered[i].eventType == 'Выход' ||
+						reverseFiltered[i].eventType == 'Выход по лицу'
 					) {
 						firstAndLastEventsInOut.outTime = reverseFiltered.length - 1 - i
 
@@ -134,13 +123,13 @@ const Reporting = () => {
 
 			filtered.forEach((event, num) => {
 				if (
-					filtered[num].eventType == "Вход" ||
-					filtered[num].eventType == "Вход по лицу"
+					filtered[num].eventType == 'Вход' ||
+					filtered[num].eventType == 'Вход по лицу'
 				) {
 					if (
 						filtered[num + 1] &&
-						(filtered[num + 1].eventType == "Выход" ||
-							filtered[num + 1].eventType == "Выход по лицу")
+						(filtered[num + 1].eventType == 'Выход' ||
+							filtered[num + 1].eventType == 'Выход по лицу')
 					) {
 						time.worktime =
 							time.worktime + transformDateToWorkTime(filtered, num, num + 1)
@@ -155,39 +144,15 @@ const Reporting = () => {
 				console.log(timeObj.worktime)
 			})
 
-			// console.log
-
 			setReportData(reportData => [...reportData, time])
 		}
 	}
 
-	// const startFilterReportData = async () => {
-	// 	for (const item of watchListOfEmployees) {
-	// 		await filterReportData(item)
-	// 		console.log("gdfghdfgh")
-	// 		// await blablabla(item)
-	// 	}
-	// }
-
 	const makeReport = async empName => {
+		const date = reportDate.current.value
 		let watchListOfEmployees = []
-		if (reportDate.current.value) {
-			// await fetch(`http://${URL}/allempskud`, {
-			// 	method: "POST",
-			// 	headers: {
-			// 		"Content-Type": "application/json;charset=utf-8",
-			// 	},
-			// 	body: JSON.stringify({
-			// 		name: empName,
-			// 		date: reportDate.current.value,
-			// 	}),
-			// })
-			// 	.then(response => console.log(response))
-			// 	.catch(err => {})
-
-			await fetch(
-				`http://${URL}/allempskud?date=${reportDate.current.value}&name=${empName}`
-			)
+		if (date) {
+			await fetch(`http://localhost:8080/door/${empName}/${date}`)
 				.then(response => {
 					return response.json()
 				})
@@ -197,15 +162,12 @@ const Reporting = () => {
 				})
 				.then(() => {
 					console.log(watchListOfEmployees)
-					// startFilterReportData() // Тут должен быть вызов функции filterReportData()
-					// for (const item of watchListOfEmployees) {
 					filterReportData(watchListOfEmployees)
 					console.log(watchListOfEmployees)
-					// }
 				})
 				.catch(err => {})
 		} else {
-			alert("Данные не введены")
+			alert('Данные не введены')
 		}
 	}
 
@@ -218,7 +180,7 @@ const Reporting = () => {
 		listOfEmployees.employees.length = 0
 		setReportData([])
 
-		await fetch(`http://${URL}/employees`)
+		await fetch(`http://localhost:8080/employees`)
 			.then(response => {
 				return response.json()
 			})
@@ -234,14 +196,6 @@ const Reporting = () => {
 				// ]
 			})
 			.catch(err => {})
-		// listOfEmployees.employees = [
-		// 	{
-		// 		name: "Чураков Илья Михайлович",
-		// 	},
-		// 	{
-		// 		name: "Придорожный Алексей Николаевич",
-		// 	},
-		// ]
 		if (listOfEmployees.employees.length) {
 			for (const item of listOfEmployees.employees) {
 				await makeReport(item.name)

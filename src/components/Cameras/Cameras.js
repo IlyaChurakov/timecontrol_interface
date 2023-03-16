@@ -1,9 +1,9 @@
-import { useRef, useEffect, useState } from "react"
-import "./cameras.css"
-import { URL } from "../../variables"
+import { useEffect, useRef, useState } from 'react'
+import { URL } from '../../variables'
+import './cameras.css'
 
 const Cameras = () => {
-	const [data, setData] = useState(null)
+	const [data, setData] = useState([])
 	const [hintArr, setHintArr] = useState(null)
 	// const hintArr = ["512", "513", "514"]
 	const [startData, setStartData] = useState(null)
@@ -21,7 +21,8 @@ const Cameras = () => {
 	const reportDate = useRef()
 
 	const getZones = () => {
-		fetch(`http://${URL}/zones`)
+		console.log('zones')
+		fetch(`http://localhost:8080/zones`)
 			.then(response => {
 				return response.json()
 			})
@@ -29,11 +30,11 @@ const Cameras = () => {
 				setHintArr(resBody)
 				console.log(resBody)
 			})
-			.catch(err => console.log("Данных пока нет"))
+			.catch(err => console.log('Данных пока нет'))
 	}
 
 	const getData = () => {
-		fetch(`http://${URL}/hook`)
+		fetch(`http://localhost:8080/cameras/20`)
 			.then(response => {
 				return response.json()
 			})
@@ -45,32 +46,32 @@ const Cameras = () => {
 				setStartData(resBody) // хранит данные которые мы получили в первый раз, после использования поиска по слову, отсюда заберем изначальный результат
 				console.log(resBody)
 			})
-			.catch(err => console.log("Данных пока нет"))
+			.catch(err => console.log('Данных пока нет'))
 	}
 
-	const [toggleFilterDate, setToggleFilterDate] = useState("forward")
+	const [toggleFilterDate, setToggleFilterDate] = useState('forward')
 
 	const filterData = arr => {
 		function byField(field) {
-			if (toggleFilterDate == "forward") {
-				lineTop.current.style.width = "10px"
-				lineBottom.current.style.width = "20px"
+			if (toggleFilterDate == 'forward') {
+				lineTop.current.style.width = '10px'
+				lineBottom.current.style.width = '20px'
 				return (a, b) => (a[field] > b[field] ? 1 : -1)
-			} else if (toggleFilterDate == "reverse") {
-				lineTop.current.style.width = "20px"
-				lineBottom.current.style.width = "10px"
+			} else if (toggleFilterDate == 'reverse') {
+				lineTop.current.style.width = '20px'
+				lineBottom.current.style.width = '10px'
 				return (a, b) => (a[field] > b[field] ? -1 : 1)
 			}
 		}
 
 		let filtered = [...arr]
-		filtered.sort(byField("date"))
+		filtered.sort(byField('date'))
 		setData(filtered)
 
-		if (toggleFilterDate == "reverse") {
-			setToggleFilterDate("forward")
-		} else if (toggleFilterDate == "forward") {
-			setToggleFilterDate("reverse")
+		if (toggleFilterDate == 'reverse') {
+			setToggleFilterDate('forward')
+		} else if (toggleFilterDate == 'forward') {
+			setToggleFilterDate('reverse')
 		}
 	}
 	const filterReportData = arr => {
@@ -80,16 +81,16 @@ const Cameras = () => {
 			}
 
 			let filtered = [...arr]
-			filtered.sort(byField("date"))
+			filtered.sort(byField('date'))
 
 			const transformDateToWorkTime = (arr, start, finish) => {
 				let startWork = arr[start].date
 				let finishWork = arr[finish].date
 
-				let startYMD = startWork.split("T")[0].replace(/\-/g, ".")
-				let startHMS = startWork.split("T")[1].split(".0")[0]
-				let finishYMD = finishWork.split("T")[0].replace(/\-/g, ".")
-				let finishHMS = finishWork.split("T")[1].split(".0")[0]
+				let startYMD = startWork.split('T')[0].replace(/\-/g, '.')
+				let startHMS = startWork.split('T')[1].split('.0')[0]
+				let finishYMD = finishWork.split('T')[0].replace(/\-/g, '.')
+				let finishHMS = finishWork.split('T')[1].split('.0')[0]
 
 				let startTime = new Date(`${startYMD} ${startHMS}`)
 				let finishTime = new Date(`${finishYMD} ${finishHMS}`)
@@ -99,11 +100,11 @@ const Cameras = () => {
 			}
 
 			const transformDateToHMS = start => {
-				let startYMD = filtered[start].date.split("T")[0].replace(/\-/g, ".")
-				let startHMS = filtered[start].date.split("T")[1].split(".0")[0]
-				let hours = startHMS.split(":")[0]
-				let minutes = startHMS.split(":")[1].split(":")[0]
-				let seconds = startHMS.split(":")[1]
+				let startYMD = filtered[start].date.split('T')[0].replace(/\-/g, '.')
+				let startHMS = filtered[start].date.split('T')[1].split('.0')[0]
+				let hours = startHMS.split(':')[0]
+				let minutes = startHMS.split(':')[1].split(':')[0]
+				let seconds = startHMS.split(':')[1]
 				return {
 					startYMD,
 					startHMS,
@@ -167,7 +168,7 @@ const Cameras = () => {
 			setReportData(filtered)
 		} else {
 			setReportData(false)
-			console.log("ничего не нашлось")
+			console.log('ничего не нашлось')
 		}
 	}
 
@@ -198,13 +199,13 @@ const Cameras = () => {
 			let findingWord = e.target.value
 
 			await fetch(`http://${URL}/camfilter`, {
-				method: "POST",
+				method: 'POST',
 				headers: {
-					"Content-Type": "application/json;charset=utf-8",
+					'Content-Type': 'application/json;charset=utf-8',
 				},
 				body: JSON.stringify({ value: findingWord }),
 			})
-				.then(response => console.log("Запрос прошел успешно"))
+				.then(response => console.log('Запрос прошел успешно'))
 				.catch(err => console.log(err))
 
 			await fetch(`http://${URL}/camfilter`)
@@ -223,34 +224,41 @@ const Cameras = () => {
 	const makeReport = async e => {
 		e.preventDefault()
 
-		if (reportDate.current.value) {
-			await fetch(`http://${URL}/camreport`, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json;charset=utf-8",
-				},
-				body: JSON.stringify({
-					fio: reportFIO.current.value,
-					zone: reportZone.current.value,
-					date: reportDate.current.value,
-				}),
-			})
-				.then(response => console.log(response))
-				.catch(err => console.log(err))
-			await fetch(`http://${URL}/camreport`)
+		const date = reportDate.current.value
+		const fio = reportFIO.current.value
+		const zone = reportZone.current.value
+
+		if (date && fio && zone) {
+			await fetch(
+				`http://localhost:8080/cameras/fio/zone/${fio}/${zone}/${date}`
+			)
 				.then(response => {
 					return response.json()
 				})
 				.then(resBody => {
-					setReportData(resBody)
-					console.log(resBody)
-					filterReportData(resBody)
-					filterData(resBody)
+					setData(resBody)
+				})
+				.catch(err => console.log(err))
+		} else if (date && fio) {
+			await fetch(`http://localhost:8080/cameras/fio/${fio}/${date}`)
+				.then(response => {
+					return response.json()
+				})
+				.then(resBody => {
+					setData(resBody)
+				})
+				.catch(err => console.log(err))
+		} else if (date) {
+			await fetch(`http://localhost:8080/cameras/${date}`)
+				.then(response => {
+					return response.json()
+				})
+				.then(resBody => {
+					setData(resBody)
 				})
 				.catch(err => console.log(err))
 		} else {
-			console.log("Данные не введены")
-			alert("Данные не введены")
+			alert('Введите данные')
 		}
 	}
 
@@ -279,7 +287,6 @@ const Cameras = () => {
 						<option value='' selected>
 							Зона не выбрана
 						</option>
-						{console.log(hintArr)}
 						{hintArr ? (
 							hintArr.map((item, num) => {
 								return <option key={num}>{item.name}</option>
@@ -349,14 +356,16 @@ const Cameras = () => {
 											<td>{item !== undefined ? item.id_camera : null}</td>
 											<td>
 												{item !== undefined
-													? String(new Date(item.date))
+													? String(new Date(item.event_dt))
 															.split(/\s\d\d\d\d\s/)[1]
-															.split("GMT")[0]
+															.split('GMT')[0]
 													: null}
 											</td>
 											{console.log(data)}
 											<td>
-												{item !== undefined ? item.date.split("T")[0] : null}
+												{item !== undefined
+													? item.event_dt.split('T')[0]
+													: null}
 											</td>
 										</tr>
 									)
