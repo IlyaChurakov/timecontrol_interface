@@ -355,16 +355,14 @@ const Cameras = () => {
 											<td>{item !== undefined ? item.name : null}</td>
 											<td>{item !== undefined ? item.id_camera : null}</td>
 											<td>
-												{item !== undefined
-													? String(new Date(item.event_dt))
-															.split(/\s\d\d\d\d\s/)[1]
-															.split('GMT')[0]
+												{item.date !== undefined
+													? item.date.split('T')[1]
 													: null}
 											</td>
-											{console.log(data)}
+											{console.log(typeof item.date)}
 											<td>
-												{item !== undefined
-													? item.event_dt.split('T')[0]
+												{item.date !== undefined
+													? item.date.split('T')[0]
 													: null}
 											</td>
 										</tr>

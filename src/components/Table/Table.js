@@ -16,7 +16,7 @@ const Table = () => {
 	const reportDate = useRef()
 
 	const test = () => {
-		fetch('http://localhost:8080/door/50')
+		fetch('http://localhost:8080/doorLastEvents/50')
 			.then(response => {
 				return response.json()
 			})
@@ -88,7 +88,7 @@ const Table = () => {
 		console.log(fio)
 
 		if (date && fio) {
-			await fetch(`http://localhost:8080/report/${fio}/${date}`)
+			await fetch(`http://localhost:8080/doorReport/${fio}/${date}`)
 				.then(response => {
 					return response.json()
 				})
